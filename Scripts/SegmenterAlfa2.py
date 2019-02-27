@@ -719,10 +719,7 @@ class SignalDg:
 	def addNoDataTimes(self, data): # se debe hacer sobre carga con args para obtener solo uno de los laps
 		self.__noDataTimes.extend(data)
 
-horai=datetime.now()
-#tipo A ---- ( nombre1, nombre2, nombre3, nombre4, fechaInicio, horas a anlizar, amplitud minima, ventanas de tiempo) ---- 8 argumentos
-seg = SignalDg('EC','CAYR','','SHZ','2017-01-24  00:00:00', 24, 1000, 320)#2016-09-16  00:00:00
-#segLocal = SignalDg('ovolcan.mseed', 1000, 320)
+segLocal = SignalDg('ovolcan.mseed', 1000, 320)
 
 '''def bigTimesManager(nombre1, nombre2, nombre3, nombre4, fechainit, dias, amp, ventana):
 	dgSignals = []
@@ -746,11 +743,5 @@ seg = SignalDg('EC','CAYR','','SHZ','2017-01-24  00:00:00', 24, 1000, 320)#2016-
 	return superSignal
 
 sera = bigTimesManager('EC','CAYR','','SHZ','2017-01-24  00:00:00', 2, 1000, 320)'''
-
-
-horaf=datetime.now()-horai
-#2016-02-19
-print("\n Contando con los segundos de coneccion el script tomo: ",horaf)
-
 
 
