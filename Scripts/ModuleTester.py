@@ -5,8 +5,9 @@ Created on Tue Feb 26 11:48:40 2019
 @author: Dago
 """
 
-import SegmenterAlfa2
+import SegmenterAlfa3
 #import partitioner
+import Redunder
 
 #Archivo en el que se hara los llamados a las clases que soportan todo el proyecto
 
@@ -26,8 +27,14 @@ def segmenter():
 
 def partitioner():
     return 0
-
+ 
 def redundancy():
-    return 0
+    l1 = SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+    l2 = SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
+    l3 = SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
+    
+    lf = redo(l1,l2,l3) 
+    
+    return lf
 
 seg = segmenter()

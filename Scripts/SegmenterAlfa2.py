@@ -721,6 +721,8 @@ class SignalDg:
 
 segLocal = SignalDg('ovolcan.mseed', 1000, 320)
 
+#segLocal = SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+
 '''def bigTimesManager(nombre1, nombre2, nombre3, nombre4, fechainit, dias, amp, ventana):
 	dgSignals = []
 	added = 0 

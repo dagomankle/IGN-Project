@@ -379,7 +379,8 @@ class SignalDg:
 
 horai=datetime.now()
 #tipo A ---- ( nombre1, nombre2, nombre3, nombre4, fechaInicio, horas a anlizar, amplitud minima, ventanas de tiempo) ---- 8 argumentos
-seg = SignalDg('EC','CAYR','','SHZ','2016-02-19 00:00:00', 24, 1000, 320)
+#seg = SignalDg('EC','CAYR','','SHZ','2016-02-19 00:00:00', 24, 1000, 320)
+seg = SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
 #seg = SignalDg('volcan.mseed', 1000, 320)
 horaf=datetime.now()-horai
 
@@ -387,4 +388,6 @@ print("\n Contando con los segundos de coneccion el script tomo: ",horaf)
 
 #tipo C ---- (direccion del archivo, amplitud minima, ventanas de tiempo)---- 3 argumentos
 #seg = Signal('volcan.mseed', 1000, 320)
+
+
 
