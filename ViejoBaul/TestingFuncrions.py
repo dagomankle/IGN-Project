@@ -41,4 +41,5 @@ def bigTimesManager(nombre1, nombre2, nombre3, nombre4, fechainit, dias, amp, ve
 
 	return superSignal
 
-sera = bigTimesManager('EC','CAYR','','SHZ','2017-01-24  00:00:00', 2, 1000, 320)
+#sera = bigTimesManager('EC','CAYR','','SHZ','2017-01-24  00:00:00', 2, 1000, 320)
+    
