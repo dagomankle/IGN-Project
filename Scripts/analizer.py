@@ -7,7 +7,7 @@ class PreAnalisis:
 
 	# recibe trazos en una lista conformada por  clases SignalDg; debe aumentarse para que reciba listas de trazos cualquiera! ( aunque no hay un prog q haga eso muhahahahahahahahahahah)
 	def __init__(self, lSignalDg, puntoMinimo):  # talvez args aqui
-		self.__ minimo = puntoMinimo
+		self.__minimo = puntoMinimo
 		self.__lEventTimes = []
 		for x in range(0, len(lSignalDg)):
 			self.__preOrganizer(lSignalDg[0])		

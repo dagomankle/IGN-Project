@@ -1,5 +1,5 @@
 # se asume a esta funcion llegan dos arreglos en el cual cada elemento es una tupla de fecha inicial y final; el primer arreglo debe comprender al segundo 
-import SegmenterAlfa.py
+import Scripts.SegmenterAlfa
 
 def dataComparator(*args):
 	resultados = ""

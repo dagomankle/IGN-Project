@@ -26,12 +26,14 @@ def segmenter():
 def partitioner():
     return 0
  
-def redundancy():
+def redundancyS():# redundancia rapida basada en ventanas de tiempo 
     l1 = SignalDg('DatosPrueba2\EC.BVC2..BHZ.D.2018.002', 1000, 320)
     l2 = SignalDg('DatosPrueba2\EC.BTAM..BHZ.D.2018.002', 1000, 320)
     l3 = SignalDg('DatosPrueba2\EC.BREF..BHZ.D.2018.002', 1000, 320)
     
-    lf = redo(l1,l2,l3) 
+    lf = timeCheckerS(l1,l2,l3) 
+    
+    
     
     return lf
 
