@@ -632,7 +632,7 @@ class SignalDg:
 
 # falta lograr encapsulacion :S a pesar del get se pasa la informacion; la solucion seria crear una nueva lista y copiar de uno en uno los datos o algo asi
 
-	def getTimes(self, letra ):# imprime todos los tiempos analisados si se pone t de arugmento, con e solo tiempos de eventos si se pone n los trazos sin eventos
+	def getTimes(self, letra ):# imprime todos los tiempos analisados si se pone T de arugmento, con E solo tiempos de eventos si se pone N los trazos sin eventos
 		times = []
 		if letra == "T":#si se quiere imprimir todos los tiempos, haya evento(E) o no(N)
 			for x in range(0,len(self.__subSearchTimeTraces)):
@@ -655,7 +655,7 @@ class SignalDg:
 
 	def getMinPoint(self):
 		min = self.__minimumPointEvent
-		return trace
+		return min
 
 	def getTrace(self):
 		trace = self.__trace

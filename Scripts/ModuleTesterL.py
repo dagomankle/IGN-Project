@@ -30,13 +30,32 @@ def segmenter():
 def partitioner():
     return 0
  
-def redundancy():
-    l1 = SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
-    l2 = SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
-    l3 = SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
+def redundancy(seconds):
+    l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+    #l2 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+    #l3 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+    #print(l1.getNumberELaps())
+    #print("segunda----")
+    l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
+    #print(l2.getNumberELaps())
+    #print("tercera-----")
+    l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
+    #print(l3.getNumberELaps())
     
-    lf = redo(l1,l2,l3) 
+    eL1 = l1.getEventLaps()
+    eL2 = l2.getEventLaps()
+    eL3 = l3.getEventLaps()
+    
+    '''l1.getEventLaps()[0].getTrace().plot()
+    l3.getEventLaps()[0].getTrace().plot()
+    print(l1.getEventLaps()[0].getStats().starttime)
+    print(l3.getEventLaps()[0].getStats().starttime)
+    x = (l1.getEventLaps()[0]).getStats().starttime - (l3.getEventLaps())[0].getStats().starttime
+    print(x)'''
+    lf = Redunder.timeCheckerS(eL1,eL2,eL3,seconds)# cambiar el ultimo parametro para diferencia maxima entre sensores 
+    #lf = [l1,l2,l3]
     
     return lf
 
-seg = segmenter()
+#seg = segmenter()
+reds = redundancy(10)

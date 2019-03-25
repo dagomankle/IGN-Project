@@ -323,12 +323,12 @@ class SignalDg:
         return times
 
     def getStats(self):
-        status = self.__trace.stats()
+        status = self.__trace.stats
         return status
 
     def getMinPoint(self):
         min = self.__minimumPointEvent
-        return trace
+        return min
 
     def getTrace(self):
         trace = self.__trace
