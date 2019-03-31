@@ -3,7 +3,7 @@ from obspy.core import read, UTCDateTime
 from obspy.signal.trigger import plot_trigger, recursive_sta_lta, trigger_onset
 #from obspy.signal.trigger import classic_sta_lta # si se quiere clasico
 
-class PreAnalisis:
+class Partitioner:
 
 	# recibe trazos en una lista conformada por  clases SignalDg; debe aumentarse para que reciba listas de trazos cualquiera! ( aunque no hay un prog q haga eso muhahahahahahahahahahah)
 	def __init__(self, lSignalDg, puntoMinimo):  # talvez args aqui

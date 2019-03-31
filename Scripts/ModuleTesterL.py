@@ -9,6 +9,7 @@ Created on Tue Feb 26 11:48:40 2019
 import SegmenterAlfa3
 #import Partitioner
 import Redunder
+import Analizer
 
 #Archivo en el que se hara los llamados a las clases que soportan todo el proyecto
 
@@ -27,10 +28,21 @@ def segmenter():
   
 
     
-def partitioner():
-    return 0
+def partitioner(seconds): # primero envia la señal al analizer y sobre los resultados realiza las pruebas de redundancia
+    l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+    l1 = Analizer.Partitioner()
+    '''l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
+    l2 = Analizer.Partitioner()
+    l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
+    l3 = Analizer.Partitioner()'''
+    
+    lf = l1
+    
+    #lf = Redunder.timeCheckerS(l1,l2,l3,seconds)
+    
+    return lf
  
-def redundancy(seconds):
+def redundancy(seconds):# segundos de diferencia aceptables para la redundancia / primero realiza pruebas de redundancia sobre la señal y posteriormente corre el analizer
     l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
     #l2 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
     #l3 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
@@ -42,9 +54,9 @@ def redundancy(seconds):
     l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
     #print(l3.getNumberELaps())
     
-    eL1 = l1.getEventLaps()
-    eL2 = l2.getEventLaps()
-    eL3 = l3.getEventLaps()
+    l1 = l1.getEventLaps()
+    l2 = l2.getEventLaps()
+    l3 = l3.getEventLaps()
     
     '''l1.getEventLaps()[0].getTrace().plot()
     l3.getEventLaps()[0].getTrace().plot()
@@ -52,10 +64,14 @@ def redundancy(seconds):
     print(l3.getEventLaps()[0].getStats().starttime)
     x = (l1.getEventLaps()[0]).getStats().starttime - (l3.getEventLaps())[0].getStats().starttime
     print(x)'''
-    lf = Redunder.timeCheckerS(eL1,eL2,eL3,seconds)# cambiar el ultimo parametro para diferencia maxima entre sensores 
+    lf = Redunder.timeCheckerS(l1,l2,l3,seconds)# cambiar el ultimo parametro para diferencia maxima entre sensores 
+    
+    lff = Analizer.Partitioner()
+    #lff= lf
     #lf = [l1,l2,l3]
     
-    return lf
+    return lff
 
 #seg = segmenter()
-reds = redundancy(10)
+#reds = redundancy(10)
+part = partitioner(10)
