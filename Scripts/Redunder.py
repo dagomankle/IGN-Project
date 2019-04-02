@@ -14,9 +14,9 @@ def redo(l1,l2,l3) :
     
     if l1.getNumberELaps() == l2.getNumberELaps() == l3.getNumberELaps():
         e = True
-        lf = timeChecker(l1,l2,l3)
+        lf = timeCheckerS(l1,l2,l3)
     else:
-        lf = timeChecker(l1,l2,l3, e)
+        lf = timeCheckerS(l1,l2,l3, e)
     
     return lf
 
