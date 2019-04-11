@@ -6,21 +6,21 @@ Created on Fri Mar  1 12:28:34 2019
 """
 
 #import Scripts.SegmenterAlfa3
+import Analizer
 import SegmenterAlfa3
 
-def redo(l1,l2,l3) :
+def redo(l1,l2,l3, seconds) :#cuando se realiza la redundancia despues de el analisis se usa redo para armar partitioner y tener los tiempos listos.
+    lf = l1
+    lists = [l1.getSignalsDg(), l2.getSignalsDg(), l3.getSignalsDg()]
+    lfl = timeChecker(l1.getFinalTraces(),l2.getFinalTraces(),l3.getFinalTraces(), seconds)
     
-    e = False 
-    
-    if l1.getNumberELaps() == l2.getNumberELaps() == l3.getNumberELaps():
-        e = True
-        lf = timeCheckerS(l1,l2,l3)
-    else:
-        lf = timeCheckerS(l1,l2,l3, e)
+    lf.setSignalsDg(lists)
+    lf.setFinalTraces(lfl)
+    lf.setExternalevTimes()
     
     return lf
 
-def timeCheckerS(eL1,eL2,eL3, seconds):
+def timeChecker(eL1,eL2,eL3, seconds):
     
 # para usar mas de una fuente en la redundancia se podria usar args y listas para tener mayor cantidad ee variables se 
 # usaria la misma estructura de ifs pero en los contenidos se llamaria a funciones en las que se trabajaria con foreachs 

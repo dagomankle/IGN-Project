@@ -31,16 +31,20 @@ def segmenter():
 def partitioner(seconds): # primero envia la señal al analizer y sobre los resultados realiza las pruebas de redundancia
     l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
     l1 = Analizer.Partitioner(l1.getEventLaps(), l1.getMinPoint())
-    '''l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
+    l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
     l2 = Analizer.Partitioner(l2, l2.getMinPoint())
     l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
-    l3 = Analizer.Partitioner(l3, l3.getMinPoint())'''
+    l3 = Analizer.Partitioner(l3, l3.getMinPoint())
     
-    lf = l1
-    
-    #lf = Redunder.timeCheckerS(l1,l2,l3,seconds)
+    lf = Redunder.redo(l1,l2,l3,seconds)
     
     return lf
+
+def partitionerSol(seconds): # solo utiliza una señal no hay redundancia para pruebas de impresion o funcionalidad
+    l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+    l1 = Analizer.Partitioner(l1.getEventLaps(), l1.getMinPoint())
+    
+    return l1
  
 def redundancy(seconds):# segundos de diferencia aceptables para la redundancia / primero realiza pruebas de redundancia sobre la señal y posteriormente corre el analizer
     l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
@@ -54,6 +58,7 @@ def redundancy(seconds):# segundos de diferencia aceptables para la redundancia 
     l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
     #print(l3.getNumberELaps())
     
+    pmin = l1.getMinPoint()
     l1 = l1.getEventLaps()
     l2 = l2.getEventLaps()
     l3 = l3.getEventLaps()
@@ -64,9 +69,9 @@ def redundancy(seconds):# segundos de diferencia aceptables para la redundancia 
     print(l3.getEventLaps()[0].getStats().starttime)
     x = (l1.getEventLaps()[0]).getStats().starttime - (l3.getEventLaps())[0].getStats().starttime
     print(x)'''
-    lf = Redunder.timeCheckerS(l1,l2,l3,seconds)# cambiar el ultimo parametro para diferencia maxima entre sensores 
+    lf = Redunder.timeChecker(l1,l2,l3,seconds)# cambiar el ultimo parametro para diferencia maxima entre sensores 
     
-    lff = Analizer.Partitioner()
+    lff = Analizer.Partitioner(lf,pmin)
     #lff= lf
     #lf = [l1,l2,l3]
     
@@ -74,4 +79,5 @@ def redundancy(seconds):# segundos de diferencia aceptables para la redundancia 
 
 #seg = segmenter()
 #reds = redundancy(10)
-part = partitioner(10)
+#part = partitioner(10)
+solPart = partitionerSol(10)
