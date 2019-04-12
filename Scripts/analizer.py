@@ -14,7 +14,7 @@ class Partitioner:
         self.__finalTraces = []
         for x in range(0, len(lSignalDg)):
             print(x)
-            self.__preOrganizer(lSignalDg[x])		
+            self.__preOrganizer(lSignalDg[x]) 		
 
 	# desde esta funcion se  correran las funciones stalta y se decidira que curso tomar. Podria ser oportuno usar los subsegmenters en esta parte.
     def __preOrganizer(self, signalDg):
@@ -49,15 +49,19 @@ class Partitioner:
         #cft = classic_sta_lta(trace.data, int(windowop*df), int(windowend*df)) # define los tmanios de ventana 
         onOf = trigger_onset(cft, thr_on, thr_off)
         
-        self.__defineTimes(trace, onOf)
-        plot_trigger(trace,cft,thr_on,thr_off)
-        
         # como fucking tener bien marcado el s y p .... sacar los pilches 3 tipos de seniales.
         #p_pick, s_pick = ar_pick(tr1.data, tr2.data, tr3.data, df, 1.0, 20.0, 1.0, 0.1, 4.0, 1.0, 2, 8, 0.1, 0.2)
+        p_pick, s_pick = ar_pick(trace, trace, trace, df, 1.0, 20.0, 1.0, 0.1, 4.0, 1.0, 2, 8, 0.1, 0.2, True)
         #https://docs.obspy.org/tutorial/code_snippets/trigger_tutorial.html
         
-        #print(p_pick)
-        #print(s_pick)
+        print("con fe")
+        print(p_pick)
+        print(s_pick)
+        print(trace.stats.starttime + p_pick)
+        print(trace.stats.starttime + s_pick)
+        
+        self.__defineTimes(trace, onOf, p_pick)
+        plot_trigger(trace,cft,thr_on,thr_off)
 
         '''print("que onda")
 		# Plotting the results
@@ -74,21 +78,28 @@ class Partitioner:
         plt.axis('tight')'''
         #plt.show()
 
-    def __defineTimes(self, trace, onOf):
-        
+    def __defineTimes(self, trace, onOf, p_pick):
+        extra = 0
         for x in range(0, len(onOf)):
             start = trace.stats.starttime + onOf[x][0]*(1/trace.stats.sampling_rate)
             end = trace.stats.starttime +  onOf[x][1]*[1/trace.stats.sampling_rate][0] #porque demonios se construye una lista??! el 1 tiene mas datos?
             tupla = [start, end]
             print(start)
             print(end)
-            self.__lEventTimes.append(tupla)
+            
             novoTrace = trace.slice( start, end)
+            if x == 0:
+                self.__lEventTimes.append([tupla, p_pick]) # se vera [[s pick, end], p pick]
+                #novoTrace = trace.slice( p_pick, end)
+            else:
+                self.__lEventTimes.append([tupla, extra])
+                #novoTrace = trace.slice( extra, end)
             novoTrace.plot()
+            extra = end
             self.__finalTraces.append(novoTrace)
 
-    def setExternalevTimes(self):
-        return True
+    def setExternalevTimes(self, times):
+        self.__lEventTimes = times
 
     def getEventTimes(self):
         return self.__lEventTimes 
