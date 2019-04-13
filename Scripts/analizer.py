@@ -1,7 +1,7 @@
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from obspy.core import read, UTCDateTime
-from obspy.signal.trigger import plot_trigger, recursive_sta_lta, trigger_onset, classic_sta_lta, ar_pick
-import SegmenterAlfa3
+from obspy.signal.trigger import plot_trigger, recursive_sta_lta, trigger_onset, ar_pick
+#import SegmenterAlfa3
 #from obspy.signal.trigger import classic_sta_lta # si se quiere clasico
 
 class Partitioner:
@@ -14,16 +14,13 @@ class Partitioner:
         self.__finalTraces = []
         for x in range(0, len(lSignalDg)):
             print(x)
-            self.__preOrganizer(lSignalDg[x]) 		
+            self.__preOrganizer(lSignalDg[x])
 
 	# desde esta funcion se  correran las funciones stalta y se decidira que curso tomar. Podria ser oportuno usar los subsegmenters en esta parte.
     def __preOrganizer(self, signalDg):
         trace = signalDg.getTrace()        
         trace = self.__autoStalta(trace)
         
-        self.__lEventTimes.append(trace)
-        self.__finalTraces.append(trace)
-
         '''if self.__specialCases(trace):
             self.__autoStalta(trace)
             if len(cant) == 1 :
@@ -51,7 +48,7 @@ class Partitioner:
         
         # como fucking tener bien marcado el s y p .... sacar los pilches 3 tipos de seniales.
         #p_pick, s_pick = ar_pick(tr1.data, tr2.data, tr3.data, df, 1.0, 20.0, 1.0, 0.1, 4.0, 1.0, 2, 8, 0.1, 0.2)
-        p_pick, s_pick = ar_pick(trace, trace, trace, df, 1.0, 20.0, 1.0, 0.1, 4.0, 1.0, 2, 8, 0.1, 0.2, True)
+        p_pick, s_pick = ar_pick(trace, trace, trace, df, 1.0, 20.0, 1.0, 0.1, 4.0, 1.0, 2, 8, 0.1, 0.2)
         #https://docs.obspy.org/tutorial/code_snippets/trigger_tutorial.html
         
         print("con fe")
@@ -89,6 +86,7 @@ class Partitioner:
             
             novoTrace = trace.slice( start, end)
             if x == 0:
+                p_pick = trace.stats.starttime + p_pick
                 self.__lEventTimes.append([tupla, p_pick]) # se vera [[s pick, end], p pick]
                 #novoTrace = trace.slice( p_pick, end)
             else:
@@ -115,6 +113,17 @@ class Partitioner:
 
     def setSignalsDg(self, signal):
         self.__signalsDg = signal
+        
+    def addPartitioners(self, partitioner):
+        True
+        
+    def printResultTimes(self):# se puede modificar para acomodar a los tokens deseados. 
+        f = open(" resultados.txt","w+")
+        f.write("Resultados\r\n\n Tiempo p, Tiempo s, Tiempo Fin de picado \r\n" )
+        for i in range(len(self.__lEventTimes)):
+            f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
+        f.close()
+        #https://www.techwalla.com/articles/how-to-convert-int-to-string-in-python
 
 print("Entrando al analizador yeahhh!")
 '''

@@ -30,11 +30,8 @@ def segmenter():
     
 def partitioner(seconds): # primero envia la señal al analizer y sobre los resultados realiza las pruebas de redundancia
     l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
-    #l1 = Analizer.Partitioner(l1.getEventLaps(), l1.getMinPoint())
     l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
-    #l2 = Analizer.Partitioner(l2.getEventLaps(), l2.getMinPoint())
     l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
-    #l3 = Analizer.Partitioner(l3.getEventLaps(), l3.getMinPoint())
     
     lf = Redunder.redo(l1,l2,l3,seconds)
     

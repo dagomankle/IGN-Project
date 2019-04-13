@@ -7,7 +7,7 @@ Created on Fri Mar  1 12:28:34 2019
 
 #import Scripts.SegmenterAlfa3
 import Analizer
-import SegmenterAlfa3
+#import SegmenterAlfa3
 
 def redo(l1,l2,l3, seconds) :#cuando se realiza la redundancia despues de el analisis se usa redo para armar partitioner y tener los tiempos listos.
     
@@ -109,7 +109,7 @@ def timeChecker(eL1,eL2,eL3, seconds): #timeChecker(lista, seconds):
     
     return lf 
 
-def timeCheckerS(l1,l2,l3, seconds): 
+def timeCheckerS(l1,l2,l3, seconds): #usa traces directamente no dgsignals pilas!
 
     lf = []
     times = []    
@@ -144,43 +144,44 @@ def timeCheckerS(l1,l2,l3, seconds):
                 i += 1
                 o += 1
                 u += 1'''
-            if flag3 and abs(eL1[i].getStats().starttime - eL2[o].getStats().starttime) <= seconds:
+            print(i)
+            if flag3 and abs(eL1[i].stats.starttime - eL2[o].stats.starttime) <= seconds:
                 lf.append(eL1[i])
                 times.append(l1.getEventTimes()[i])
                 i += 1
                 o += 1
-                if flag4 and abs(eL1[i-1].getStats().starttime - eL3[u].getStats().endtime) <= seconds:# inicialt  >= finalt 
+                if flag4 and abs(eL1[i-1].stats.starttime - eL3[u].stats.endtime) <= seconds:# inicialt  >= finalt 
                     u += 1
-                elif abs(eL1[i-1].getStats().starttime - eL3[u].getStats().starttime) <= seconds:
+                elif abs(eL1[i-1].stats.starttime - eL3[u].stats.starttime) <= seconds:
                     u += 1
                     '''if flag3 and abs(eL1[i-1].getStats().starttime - eL2[o].getStats().endtime) <= seconds:# inicialt  >= finalt 
                         o += 1'''
-            elif flag4 and abs(eL1[i].getStats().starttime - eL3[u].getStats().starttime) <= seconds:
+            elif flag4 and abs(eL1[i].stats.starttime - eL3[u].stats.starttime) <= seconds:
                 lf.append(eL1[i])
                 times.append(l1.getEventTimes()[i])
                 i += 1
                 u += 1
-                if flag3 and abs(eL1[i-1].getStats().starttime - eL2[o].getStats().endtime) <= seconds:# inicialt  >= finalt 
+                if flag3 and abs(eL1[i-1].stats.starttime - eL2[o].stats.endtime) <= seconds:# inicialt  >= finalt 
                     o += 1
-            elif flag3 and abs(eL1[i].getStats().endtime - eL2[o].getStats().starttime) <= seconds:  #revisar si no hay falla por index out of bounds
+            elif flag3 and abs(eL1[i].stats.endtime - eL2[o].stats.starttime) <= seconds:  #revisar si no hay falla por index out of bounds
                 i += 1 
                 flag1 = True
-            elif flag4 and abs(eL1[i].getStats().endtime - eL3[u].getStats().starttime) <= seconds:
+            elif flag4 and abs(eL1[i].stats.endtime - eL3[u].stats.starttime) <= seconds:
                 i += 1 
                 flag1 = True
             else:
                 flag1 = True
         
         if flag1 and flag3 and flag4:
-            if abs(eL2[o].getStats().starttime - eL3[u].getStats().starttime) <= seconds:
+            if abs(eL2[o].stats.starttime - eL3[u].stats.starttime) <= seconds:
                 lf.append(eL2[o])
                 times.append(l2.getEventTimes()[o])
                 o += 1
                 u += 1
             else: # como carajos usar diferencias de tiempocon aproximados o exactidud hasta min? hmmm datatime.datatime class
-                if abs(eL3[u].getStats().starttime - eL2[o].getStats().endtime) <= seconds:# inicialt  >= finalt
+                if abs(eL3[u].stats.starttime - eL2[o].stats.endtime) <= seconds:# inicialt  >= finalt
                     o += 1
-                elif abs(eL2[o].getStats().starttime - eL3[u].getStats().endtime) <= seconds:# inicialt  >= finalt
+                elif abs(eL2[o].stats.starttime - eL3[u].stats.endtime) <= seconds:# inicialt  >= finalt
                     u += 1
         elif flag2 == False and flag3 == False:# se puede mejorar haciendo que toda la columna muera
             u += 1
