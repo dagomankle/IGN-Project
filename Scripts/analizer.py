@@ -115,15 +115,22 @@ class Partitioner:
         self.__signalsDg = signal
         
     def addPartitioners(self, partitioner):
-        True
+        self.__lEventTimes.extend(partitioner.getEventTimes())
+        self.__signalsDg.extend(partitioner.getSingalsDg())
+        self.__finalTraces.extend(partitioner.setFinalTraces())
         
     def printResultTimes(self):# se puede modificar para acomodar a los tokens deseados. 
-        f = open(" resultados.txt","w+")
+        f = open("resultados.txt","w+")
         f.write("Resultados\r\n\n Tiempo p, Tiempo s, Tiempo Fin de picado \r\n" )
         for i in range(len(self.__lEventTimes)):
             f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
         f.close()
-        #https://www.techwalla.com/articles/how-to-convert-int-to-string-in-python
+        
+    def addResultTimes(self):# se puede modificar para acomodar a los tokens deseados. 
+        f = open("resultados.txt","a+")
+        for i in range(len(self.__lEventTimes)):
+            f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
+        f.close()
 
 print("Entrando al analizador yeahhh!")
 '''

@@ -376,6 +376,12 @@ class SignalDg:
     def getNoDataTimes(self): # se debe hacer sobre carga con args para obtener solo uno de los laps
         nodata = self.__noDataTimes
         return nodata
+    
+    def addEventLaps(self, moreEventLaps): # se debe hacer sobre carga con args para obtener solo uno de los laps
+        self.__eventTraceList.extend(moreEventLaps)
+        
+    def addNoDataTimes(self, data): # se debe hacer sobre carga con args para obtener solo uno de los laps
+        self.__noDataTimes.extend(data)
 
 #horai=datetime.now()
 #tipo A ---- ( nombre1, nombre2, nombre3, nombre4, fechaInicio, horas a anlizar, amplitud minima, ventanas de tiempo) ---- 8 argumentos
