@@ -130,10 +130,10 @@ def bigTimesManagerF(aNombre1, aNombre2, aNombre3, aNombre4, bNombre1, bNombre2,
                 part = Redunder.redo(partA,partB,partC,seconds)
                 superPartitioner.addPartitioners(part)
     else:
-        for x in range(0, dias):
+        for x in range(0, dias): 
             segA = SegmenterAlfa3.SignalDg(aNombre1, aNombre2, aNombre3, aNombre4, str(tiempox + added), 24, amp, ventana)
             segB = SegmenterAlfa3.SignalDg(bNombre1, bNombre2, bNombre3, bNombre4, str(tiempox + added), 24, amp, ventana)
-            segC = SegmenterAlfa3.SignalDg(cNombre1, cNombre2, cNombre3, cNombre4, str(tiempox + added), 24, amp, ventana)
+            segC = SegmenterAlfa3.SignalDg(cNombre1, cNombre2, cNombre3, cNombre4, str(tiempox + added), 24, amp, ventana)            
             added = added + 86400
             
             pmin = segA.getMinPoint()
@@ -151,12 +151,81 @@ def bigTimesManagerF(aNombre1, aNombre2, aNombre3, aNombre4, bNombre1, bNombre2,
             
     return superPartitioner
 
+    #return superSignal mode puede ser R o P en string define si se usa analisis o redundancia primero
+def bigTimesManagerD(aNombre1, bNombre1, cNombre1, dias, amp, ventana, seconds, mode):
 
-l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+    added = 0 
+    superPartitioner = None
+    
+    segA = read(aNombre1)
+    segB = read(bNombre1)
+    segC = read(cNombre1)
+    
+    segA = SegmenterAlfa3.SignalDg(segA, [amp, ventana])
+    segB = SegmenterAlfa3.SignalDg(segB, [amp, ventana])
+    segC = SegmenterAlfa3.SignalDg(segC, [amp, ventana])
+	
+    if mode == "P":
+        for x in range(0, dias):
+            added = added + 86400
+            
+            partA = Analizer.Partitioner(segA.getEventLaps(), segA.getMinPoint())
+            partB = Analizer.Partitioner(segB.getEventLaps(), segB.getMinPoint())
+            partC = Analizer.Partitioner(segC.getEventLaps(), segC.getMinPoint())
+            
+            if x == 0:
+                superPartitioner = Redunder.redo(partA,partB,partC,seconds)
+            else:
+                part = Redunder.redo(partA,partB,partC,seconds)
+                superPartitioner.addPartitioners(part)
+    else:
+        for x in range(0, dias):
+            added = added + 86400
+            
+            pmin = segA.getMinPoint()
+            segA = segA.getEventLaps()
+            segB = segB.getEventLaps()
+            segC = segC.getEventLaps()
+            
+            part = Redunder.timeChecker(segA,segB,segC,seconds)
+            
+            if x == 0:
+                superPartitioner = Analizer.Partitioner(part,pmin)
+            else:
+                part = Analizer.Partitioner(part,pmin)
+                superPartitioner.addPartitioners(part)        
+            
+    return superPartitioner
+
+l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018', 1000, 320)
+l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018', 1000, 320)
+l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018', 1000, 320)
+
+'''l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
 l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
-l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
+l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)'''
     
 #seg = segmenter()
 #reds = redundancy(10)
-part = partitioner(10)
+#part = partitioner(l1, l2, l3, 10)
 #solPart = partitionerSol(10)
+
+'''for x in range(2, 30):
+    if x < 10:
+        a = 'EC.BVC2..BHZ.D.2018.00' + str(x)
+        b = 'EC.BTAM..BHZ.D.2018.00' + str(x) 
+        c = 'EC.BREF..BHZ.D.2018.00' + str(x)
+    else:
+        a = 'EC.BVC2..BHZ.D.2018.0' + str(x)
+        b = 'EC.BTAM..BHZ.D.2018.0' + str(x)
+        c = 'EC.BREF..BHZ.D.2018.0' + str(x)
+    a1 = SegmenterAlfa3.SignalDg(a, 1000, 320)
+    b1 = SegmenterAlfa3.SignalDg(b, 1000, 320)
+    c1 = SegmenterAlfa3.SignalDg(c, 1000, 320)
+    
+    part = partitioner(a1, b1, c1, 10)
+    if x == 0:
+        part.printResultTimes()
+    else:
+        part.addPrintResultTimes()'''
+    

@@ -126,7 +126,7 @@ class Partitioner:
             f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
         f.close()
         
-    def addResultTimes(self):# se puede modificar para acomodar a los tokens deseados. 
+    def addPrintResultTimes(self):# se puede modificar para acomodar a los tokens deseados. 
         f = open("resultados.txt","a+")
         for i in range(len(self.__lEventTimes)):
             f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")

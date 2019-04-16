@@ -57,6 +57,16 @@ class SignalDg:
             self.__tf = self.__trace.stats.endtime
             self.__minimumPointEvent = lArgs[1]
             self.__analisisTimeLapse = lArgs[2]
+            
+        elif argNum == 2 : # cuando se envia un trazo completo 
+            #seg = Signal(trace, [1000, 320])
+            starter = False
+            self.__oTrace = lArgs[0]
+            self.__trace = (lArgs[0])[0]
+            self.__t = self.__trace.stats.starttime
+            self.__tf = self.__trace.stats.endtime
+            self.__minimumPointEvent = lArgs[1][0]
+            self.__analisisTimeLapse = lArgs[1][1]
         else:
             print("Argumentos no aceptables")
             sys.exit()
