@@ -188,11 +188,15 @@ class SignalDg:
     def __timesOrganizer(self):# organiza los tiempos usados guardados en base a la existencia de eventos
         internal = []
         internal2 = []
-        i = 0
+        i = 0                
+       
         for x in range(0,len(self.__subSearchTimeTraces)):
             control = True
+            o = -1
             if self.__subSearchTimeTraces[x][2] == "E":
                 for y in range(0,len(internal)):
+                    if internal[y][2] == "E":                        
+                        o+=1
                     if x == 0:
                         internal.append(self.__subSearchTimeTraces[0])
                         internal2.append(self.__eventTraceList[0])
@@ -200,13 +204,14 @@ class SignalDg:
                         break
                     elif self.__subSearchTimeTraces[x][1] <= internal[y][0]:
                         internal.insert(y,self.__subSearchTimeTraces[x])
-                        internal2.insert(y,self.__eventTraceList[i])
+                        internal2.insert(o,self.__eventTraceList[i])
                         control = False
                         break
                 if control:
                     internal.append(self.__subSearchTimeTraces[x])
                     internal2.append(self.__eventTraceList[i])
                 i = i+1
+                
             else:
                 for y in range(0,len(internal)):
                     if x == 0:
@@ -219,7 +224,7 @@ class SignalDg:
                         break
                 if control:
                     internal.append(self.__subSearchTimeTraces[x])
-
+                               
         self.__eventTraceList = internal2
         return internal
     
@@ -311,7 +316,7 @@ class SignalDg:
             suma = suma + trace[x]
         return suma / len(trace) 
 
-    def __timeAranger(self):
+    def __timeAranger(self): #arregla los eventos guardados por orden de tiempo, optimización seria incluir en el momento en que se va a guardar un trazo
         hola = 1
 
 # LAS FUNCIONES SIGUIENTES NO SON PARTE FUNCIONAL DE LA CREACION DEL OBJETO; SON FUNCIONES DE MUESTREO U OBTENCION DE DATOS

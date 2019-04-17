@@ -48,14 +48,13 @@ class Partitioner:
         
         # como fucking tener bien marcado el s y p .... sacar los pilches 3 tipos de seniales.
         #p_pick, s_pick = ar_pick(tr1.data, tr2.data, tr3.data, df, 1.0, 20.0, 1.0, 0.1, 4.0, 1.0, 2, 8, 0.1, 0.2)
-        p_pick, s_pick = ar_pick(trace, trace, trace, df, 1.0, 20.0, 1.0, 0.1, 4.0, 1.0, 2, 8, 0.1, 0.2)
+        #p_pick, s_pick = ar_pick(trace, trace, trace, df, 1.0, 20.0, 1.0, 0.1, 4.0, 1.0, 2, 8, 0.1, 0.2)
         #https://docs.obspy.org/tutorial/code_snippets/trigger_tutorial.html
         
         print("con fe")
-        print(p_pick)
-        print(s_pick)
-        print(trace.stats.starttime + p_pick)
-        print(trace.stats.starttime + s_pick)
+        p_pick = 0
+        #print(trace.stats.starttime + p_pick)
+        #print(trace.stats.starttime + s_pick)
         
         self.__defineTimes(trace, onOf, p_pick)
         plot_trigger(trace,cft,thr_on,thr_off)
@@ -85,13 +84,15 @@ class Partitioner:
             print(end)
             
             novoTrace = trace.slice( start, end)
-            if x == 0:
+            
+            '''if x == 0:
                 p_pick = trace.stats.starttime + p_pick
                 self.__lEventTimes.append([tupla, p_pick]) # se vera [[s pick, end], p pick]
                 #novoTrace = trace.slice( p_pick, end)
             else:
                 self.__lEventTimes.append([tupla, extra])
-                #novoTrace = trace.slice( extra, end)
+                #novoTrace = trace.slice( extra, end)'''
+            self.__lEventTimes.append(tupla)
             novoTrace.plot()
             extra = end
             self.__finalTraces.append(novoTrace)
@@ -121,15 +122,18 @@ class Partitioner:
         
     def printResultTimes(self):# se puede modificar para acomodar a los tokens deseados. 
         f = open("resultados.txt","w+")
-        f.write("Resultados\r\n\n Tiempo p, Tiempo s, Tiempo Fin de picado \r\n" )
+        #f.write("Resultados\r\n\n Tiempo p, Tiempo s, Tiempo Fin de picado \r\n" )
+        f.write("Resultados\r\n\n Tiempo inicio de picado, Tiempo Fin de picado \r\n" )
         for i in range(len(self.__lEventTimes)):
-            f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
+            #f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
+            f.write(str(self.__lEventTimes[i][0]) + ", " + str(self.__lEventTimes[i][1]) + "\r\n")
         f.close()
         
     def addPrintResultTimes(self):# se puede modificar para acomodar a los tokens deseados. 
         f = open("resultados.txt","a+")
         for i in range(len(self.__lEventTimes)):
-            f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
+            #f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
+            f.write(str(self.__lEventTimes[i][0]) + ", " + str(self.__lEventTimes[i][1] + "\r\n"))
         f.close()
 
 print("Entrando al analizador yeahhh!")

@@ -20,7 +20,7 @@ def segmenter():
     horai= SegmenterAlfa3.datetime.now()
     #tipo A ---- ( nombre1, nombre2, nombre3, nombre4, fechaInicio, horas a anlizar, amplitud minima, ventanas de tiempo) ---- 8 argumentos
     #seg = SignalDg('EC','CAYR','','SHZ','2017-01-24  00:00:00', 24, 1000, 320)#2016-09-16  00:00:00
-    segL = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+    segL = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
     #segL = SegmenterAlfa3.SignalDg('ovolcan.mseed', 1000, 320)
     horaf= SegmenterAlfa3.datetime.now()-horai
     #2016-02-19
@@ -30,9 +30,6 @@ def segmenter():
 
     
 def partitioner(l1, l2, l3, seconds): # primero envia la señal al analizer y sobre los resultados realiza las pruebas de redundancia
-    l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
-    l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
-    l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
     
     lf = Redunder.redo(l1,l2,l3,seconds)
     
@@ -207,7 +204,7 @@ l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)'''
     
 #seg = segmenter()
 #reds = redundancy(10)
-#part = partitioner(l1, l2, l3, 10)
+part = partitioner(l1, l2, l3, 10)
 #solPart = partitionerSol(10)
 
 '''for x in range(2, 30):
