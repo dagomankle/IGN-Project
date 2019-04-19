@@ -4,6 +4,7 @@
 from obspy.core import read, UTCDateTime
 from datetime import datetime, date, time
 from obspy.clients.arclink import Client# para generar la coneccion con la base de datos
+from obspy.signal.invsim import corn_freq_2_paz
 
 class SignalDg:
     def __init__(self, *args):
@@ -72,6 +73,9 @@ class SignalDg:
             sys.exit()
 
         self.__trace.detrend()# funcion de la libreria stream que quita la media de un trazo para que este se encuentre encerado.
+        paz = corn_freq_2_paz(1.0, damp=0.707)  
+        paz['sensitivity'] = 1.0
+        self.__trace.simulate( paz_simulate=paz)
         self.__frecuencia = self.__trace.stats.sampling_rate
         self.__eventTraceList = []
         self.__subSearchTimeTraces = []# se usa para el control de la recursion durante la construccion del objeto, al final almcenara espacios de busqueda con un filtro
