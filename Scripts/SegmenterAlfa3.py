@@ -73,7 +73,7 @@ class SignalDg:
             sys.exit()
 
         self.__trace.detrend()# funcion de la libreria stream que quita la media de un trazo para que este se encuentre encerado.
-        paz = corn_freq_2_paz(1.0, damp=0.707)  
+        paz = corn_freq_2_paz(1.0, damp=1)  #0.707
         paz['sensitivity'] = 1.0
         self.__trace.simulate( paz_simulate=paz)
         self.__frecuencia = self.__trace.stats.sampling_rate

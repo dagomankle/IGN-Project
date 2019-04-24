@@ -198,13 +198,13 @@ def bigTimesManagerD(aNombre1, bNombre1, cNombre1, dias, amp, ventana, seconds, 
 l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018', 1000, 320)
 l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018', 1000, 320)'''
 
-'''l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
 l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
-l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)'''
+l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
     
-seg = segmenter()
+#seg = segmenter()
 #reds = redundancy(10)
-#part = partitioner(l1, l2, l3, 10)
+part = partitioner(l1, l2, l3, 10)
 #solPart = partitionerSol(10)
 
 '''for x in range(2, 30):

@@ -1,6 +1,6 @@
 #import matplotlib.pyplot as plt
 from obspy.core import read, UTCDateTime
-from obspy.signal.trigger import plot_trigger, recursive_sta_lta, trigger_onset, ar_pick
+from obspy.signal.trigger import plot_trigger, recursive_sta_lta, trigger_onset, ar_pick, classic_sta_lta, carl_sta_trig, delayed_sta_lta
 #import SegmenterAlfa3
 #from obspy.signal.trigger import classic_sta_lta # si se quiere clasico
 
@@ -38,12 +38,16 @@ class Partitioner:
         # osea la parametrizacion para cada segmento de preferencia aqui mismo no en otra funcion
 		#wop = sta wend lta?
 		
-        return self.__analisiSTALTA( trace,1.6,0.5,5, 10)
+        return self.__analisiSTALTA( trace,5,0.3,2, 20)#como ajustar ... 1.6,0.5,2, 17/ full bien 3.5,0.5,2, 20
 
     def __analisiSTALTA(self, trace, thr_on, thr_off, windowop, windowend): # falta controlar los piocs iniciales del alg !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         df = trace.stats.sampling_rate
         cft = recursive_sta_lta(trace.data, int(windowop*df), int(windowend*df)) # define los tmanios de ventana 
         #cft = classic_sta_lta(trace.data, int(windowop*df), int(windowend*df)) # define los tmanios de ventana 
+        #cft = carl_sta_trig(trace.data, int(5 * df), int(10 * df), 0.8, 0.8)
+        #cft = delayed_sta_lta(trace.data, int(windowop * df), int(windowend * df))
+        #plot_trigger(trace, cft, 5, 10)
+        #onOf = trigger_onset(cft, 1.6, 0.5)
         onOf = trigger_onset(cft, thr_on, thr_off)
         
         # como fucking tener bien marcado el s y p .... sacar los pilches 3 tipos de seniales.
