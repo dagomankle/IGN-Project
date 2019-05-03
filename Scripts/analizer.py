@@ -38,9 +38,11 @@ class Partitioner:
         # osea la parametrizacion para cada segmento de preferencia aqui mismo no en otra funcion
 		#wop = sta wend lta?
 		
-        return self.__analisiSTALTA( trace,5,0.3,2, 20)#como ajustar ... 1.6,0.5,2, 17/ full bien 3.5,0.5,2, 20
+        return self.__analisiSTALTA( trace,5,0.4,2, 20)#como ajustar ... 1.6,0.5,2, 17/ full bien 3.5,0.5,2, 20 //5,0.4,2, 20 besto para 1000 // 4,0.3,2, 20 500?
 
     def __analisiSTALTA(self, trace, thr_on, thr_off, windowop, windowend): # falta controlar los piocs iniciales del alg !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        print("general villamil")
+        print(trace.std())
         df = trace.stats.sampling_rate
         cft = recursive_sta_lta(trace.data, int(windowop*df), int(windowend*df)) # define los tmanios de ventana 
         #cft = classic_sta_lta(trace.data, int(windowop*df), int(windowend*df)) # define los tmanios de ventana 
@@ -56,6 +58,7 @@ class Partitioner:
         #https://docs.obspy.org/tutorial/code_snippets/trigger_tutorial.html
         
         print("con fe")
+        
         p_pick = 0
         #print(trace.stats.starttime + p_pick)
         #print(trace.stats.starttime + s_pick)
@@ -81,6 +84,8 @@ class Partitioner:
     def __defineTimes(self, trace, onOf, p_pick):
         extra = 0
         for x in range(0, len(onOf)):
+            print("esp cas")
+            print(trace.std())
             start = trace.stats.starttime + onOf[x][0]*(1/trace.stats.sampling_rate)
             end = trace.stats.starttime +  onOf[x][1]*[1/trace.stats.sampling_rate][0] #porque demonios se construye una lista??! el 1 tiene mas datos?
             tupla = [start, end]
@@ -124,20 +129,43 @@ class Partitioner:
         self.__signalsDg.extend(partitioner.getSingalsDg())
         self.__finalTraces.extend(partitioner.setFinalTraces())
         
+    def plotEventLaps(self):# se debe hacer sobre carga con args para plotear solo uno
+        num = 0 
+        for x in self.__finalTraces:
+            print(num)
+            num =num + 1
+            x.plot()
+        
     def printResultTimes(self):# se puede modificar para acomodar a los tokens deseados. 
         f = open("resultados.txt","w+")
         #f.write("Resultados\r\n\n Tiempo p, Tiempo s, Tiempo Fin de picado \r\n" )
-        f.write("Resultados\r\n\n Tiempo inicio de picado, Tiempo Fin de picado \r\n" )
+        f.write("Tiempo inicio de picado,Tiempo Fin de picado\r\n" )
         for i in range(len(self.__lEventTimes)):
             #f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
-            f.write(str(self.__lEventTimes[i][0]) + ", " + str(self.__lEventTimes[i][1]) + "\r\n")
+            f.write(str(self.__lEventTimes[i][0]) + "," + str(self.__lEventTimes[i][1]) + "\r\n")
         f.close()
         
     def addPrintResultTimes(self):# se puede modificar para acomodar a los tokens deseados. 
         f = open("resultados.txt","a+")
         for i in range(len(self.__lEventTimes)):
             #f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
-            f.write(str(self.__lEventTimes[i][0]) + ", " + str(self.__lEventTimes[i][1]) + "\r\n")
+            f.write(str(self.__lEventTimes[i][0]) + "," + str(self.__lEventTimes[i][1]) + "\r\n")
+        f.close()
+        
+    def printResult(self):# se puede modificar para acomodar a los tokens deseados. 
+        f = open("resultados.txt","w+")
+        #f.write("Resultados\r\n\n Tiempo p, Tiempo s, Tiempo Fin de picado \r\n" )
+        f.write("Tiempo inicio de picado,Tiempo Fin de picado,Amplitud\r\n" )
+        for i in range(len(self.__lEventTimes)):
+            #f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
+            f.write(str(self.__lEventTimes[i][0]) + "," + str(self.__lEventTimes[i][1]) +","+str(abs(self.__finalTraces[i].max())) + "\r\n")
+        f.close()
+        
+    def addPrintResult(self):# se puede modificar para acomodar a los tokens deseados. 
+        f = open("resultados.txt","a+")
+        for i in range(len(self.__lEventTimes)):
+            #f.write(str(self.__lEventTimes[i][1]) + ", " + str(self.__lEventTimes[i][0][0]) + ", " + str(self.__lEventTimes[i][0][1]) + "\r\n")
+            f.write(str(self.__lEventTimes[i][0]) + "," + str(self.__lEventTimes[i][1]) +","+str(abs(self.__finalTraces[i].max())) + "\r\n")
         f.close()
 
 print("Entrando al analizador yeahhh!")
@@ -160,4 +188,6 @@ trace.spectrogram()
 
 
 '''
+
+#std de 200 ? para excepcion de tremor?
 

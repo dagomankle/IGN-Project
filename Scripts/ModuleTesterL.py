@@ -35,8 +35,8 @@ def partitioner(l1, l2, l3, seconds): # primero envia la señal al analizer y so
     
     return lf
 
-def partitionerSol(l1, seconds): # solo utiliza una señal no hay redundancia para pruebas de impresion o funcionalidad
-    l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+def partitionerSol(name, amp): # solo utiliza una señal no hay redundancia para pruebas de impresion o funcionalidad
+    l1 = SegmenterAlfa3.SignalDg(name, amp, 320)
     l1 = Analizer.Partitioner(l1.getEventLaps(), l1.getMinPoint())
     
     return l1
@@ -198,14 +198,14 @@ def bigTimesManagerD(aNombre1, bNombre1, cNombre1, dias, amp, ventana, seconds, 
 l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018', 1000, 320)
 l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018', 1000, 320)'''
 
-l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
-l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 1000, 320)
-l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
+'''l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 500, 320)
+l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 500, 320)
+l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 500, 320)'''
     
 #seg = segmenter()
 #reds = redundancy(10)
-part = partitioner(l1, l2, l3, 10)
-#solPart = partitionerSol(10)
+#part = partitioner(l1, l2, l3, 10)
+solPart = partitionerSol('EC.BREF..BHZ.D.2018.002',1000)
 
 '''for x in range(2, 30):
     if x < 10:

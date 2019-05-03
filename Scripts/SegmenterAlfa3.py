@@ -90,7 +90,7 @@ class SignalDg:
                     self.__incomingTraces()    
                 if starter: 
                     print("hey ho wtf")    
-                    #self.__subSegmenter()            
+                    self.__subSegmenter()            
 
     def __incomingTraces(self):# dado que si se interrumpe la señal un trazo se compone de varios puestos en el objeto trazo de forma bidimensional
         if len(self.__oTrace) != 1:
