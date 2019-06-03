@@ -20,7 +20,7 @@ def segmenter():
     horai= SegmenterAlfa3.datetime.now()
     #tipo A ---- ( nombre1, nombre2, nombre3, nombre4, fechaInicio, horas a anlizar, amplitud minima, ventanas de tiempo) ---- 8 argumentos
     #seg = SignalDg('EC','CAYR','','SHZ','2017-01-24  00:00:00', 24, 1000, 320)#2016-09-16  00:00:00
-    segL = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018', 1000, 320)
+    segL = SegmenterAlfa3.SignalDg('ovolcan.mseed', 1000, 320)
     #segL = SegmenterAlfa3.SignalDg('ovolcan.mseed', 1000, 320)
     horaf= SegmenterAlfa3.datetime.now()-horai
     #2016-02-19
@@ -194,20 +194,21 @@ def bigTimesManagerD(aNombre1, bNombre1, cNombre1, dias, amp, ventana, seconds, 
             
     return superPartitioner
 
-'''l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018', 1000, 320)
+l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018', 1000, 320)
 l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018', 1000, 320)
-l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018', 1000, 320)'''
+l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018', 1000, 320)
 
-'''l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 500, 320)
-l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002', 500, 320)
-l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 500, 320)'''
+'''l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
+l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002',1000, 320)
+l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)'''
     
 #seg = segmenter()
 #reds = redundancy(10)
-#part = partitioner(l1, l2, l3, 10)
-solPart = partitionerSol('EC.BREF..BHZ.D.2018.002',1000)
+part = partitioner(l1, l2, l3, 10)
+#solPart = partitionerSol('EC.BREF..BHZ.D.2018.002',1000)
 
 '''for x in range(2, 30):
+    EC.BREF..BHZ.D.2018.015
     if x < 10:
         a = 'EC.BVC2..BHZ.D.2018.00' + str(x)
         b = 'EC.BTAM..BHZ.D.2018.00' + str(x) 
