@@ -1,8 +1,8 @@
 Total eventos Ign:187
-Total eventos GeoDago:6
-Total excepciones GeoDago:1
-Relacion: total eventos Ign a GeoDago =3116.6666666666665%
-Relacion: total eventos GeoDago a Ign =3.2085561497326203%
-Porcentaje de excepciones en GeoDago =16.666666666666668%
-Total eventos detectados por GeoDago y no Ign:187
-Total eventos detectados por Ign y no GeoDago:6
+Total eventos GeoDago:161
+Total excepciones GeoDago:22
+Relacion: total eventos Ign a GeoDago =116.14906832298136 %
+Relacion: total eventos GeoDago a Ign =86.09625668449198 %
+Porcentaje de excepciones en GeoDago =13.664596273291925 %
+Total eventos detectados por GeoDago y no Ign:153
+Total eventos detectados por Ign y no GeoDago:127

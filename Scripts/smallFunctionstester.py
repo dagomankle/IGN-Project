@@ -59,6 +59,7 @@ def printo(name, listo):# se puede modificar para acomodar a los tokens deseados
     
 def converDates(lista, tipo):
     lectorat = []
+    suma = 0
     if tipo == 0:
         for register in lista:#1/17/2018 17:55:57
             fecha = datetime.strptime(register[1], '%m/%d/%Y %H:%M:%S')
@@ -67,69 +68,55 @@ def converDates(lista, tipo):
         for register in lista:
             text = register[0].replace('T',' ')
             text = text.replace('Z','')
-            fecha = [datetime.strptime(text, '%Y-%m-%d %H:%M:%S.%f'),register[3]]
-            lectorat.append(fecha)
+            fecha = datetime.strptime(text, '%Y-%m-%d %H:%M:%S.%f')
+            if len(register[3]) == 4:
+                suma +=1
+            lectorat.append(fecha)        
+        lectorat = [lectorat, suma]
     
     return lectorat
     
 def comparador(name,ign, geoDago, seconds):
     ignDates = converDates(ign,0)
     dgDates = converDates(geoDago,1) 
-    resultati=[0,0,0,0,0]# 5 partes 0 = eventos ign, 1= eventos dg, 2= excepciones dg, 3 = faltas ign, 4 = faltas dg
+    resultati=[0,0,dgDates[1],0,0]# 5 partes 0 = eventos ign, 1= eventos dg, 2= excepciones dg, 3 = faltas ign, 4 = faltas dg
     i = 0
     u = 0
     ronda = 1
     flag1 = True
     flag2 = True
     print(len(ignDates))
-    print(len(dgDates))
+    print(len(dgDates[0]))
     
     while flag1 or flag2:
-        #print()
-        #print(ronda)
-        '''if flag1:
-            print(ignDates[i])
-            print(i)'''
+        print("                     - Ronda" + str(ronda)+ "-")
+        if flag1:
+            print(str(ignDates[i])+" -indice i :" + str(i))
         if flag2:
-            print()
-            print(ronda)
-            print(dgDates[u][0])
-            print(u)
-            print(dgDates[u][1])
-            print(len(dgDates[u][1]))
-        '''if flag1 and flag2:
-            print((ignDates[i] - dgDates[u][0]))
-            print((ignDates[i] - dgDates[u][0]).total_seconds())'''
+            #print()
+            print(resultati[1])
+            #print(ronda)
+            print(str((dgDates[0])[u]) +" -indice u :" + str(u) )
             
-        
-        
-        '''print(flag1)
-        print(flag2)'''
+        print(str(flag1) +"/Banderas/"+str(flag2) + " /3 =" + str(resultati[3])+ "  /4  ="+ str(resultati[4]) )
+
         
         if flag1 and flag2:
-            if abs((ignDates[i] - dgDates[u][0]).total_seconds()) <= seconds:# ignDates -- dgDates 
+            if abs((ignDates[i] - dgDates[0][u]).total_seconds()) <= seconds:# ignDates -- dgDates 
+                print("holi      "+ str( (ignDates[i] - dgDates[0][u]).total_seconds()))
                 resultati[0] += 1
                 resultati[1] += 1
-                if len(dgDates[u])[1] == 4:
-                    resultati[2] += 1
                 i += 1
                 u += 1
-            elif (ignDates[i] - dgDates[u][0]).total_seconds() > 0 : # ignDates > dgDates
-                print("holi")
+            elif (ignDates[i] - dgDates[0][u]).total_seconds() > 0 : # ignDates > dgDates
+                print("comun      "+ str( (ignDates[i] - dgDates[0][u]).total_seconds()))
                 resultati[1] += 1
                 resultati[4] += 1
-                if len(dgDates[u][1]) == 4:
-                    print("chau")
-                    resultati[2] += 1
                 u += 1
             else:
                 resultati[0] += 1
                 resultati[3] += 1
-                if len(dgDates[u][1]) == 4:
-                    print("chau")
-                    resultati[2] += 1
-                u += 1
-                
+                i += 1                
         elif flag1:
             resultati[0] += 1
             resultati[3] += 1
@@ -137,13 +124,11 @@ def comparador(name,ign, geoDago, seconds):
         elif flag2:
             resultati[1] += 1
             resultati[4] += 1
-            if len(dgDates[u][1]) == 4:
-                resultati[2] += 1
             u += 1
             
         if i >= len(ignDates):
             flag1 = False
-        if u >= len(dgDates):
+        if u >= len(dgDates[0]):
             flag2 = False
         
         ronda +=1
@@ -153,22 +138,22 @@ def comparador(name,ign, geoDago, seconds):
     f.write("Total eventos Ign:"+ str(resultati[0])+"\r\n" )
     f.write("Total eventos GeoDago:"+ str(resultati[1])+"\r\n" )
     f.write("Total excepciones GeoDago:"+ str(resultati[2])+"\r\n" )
-    f.write("Relacion: total eventos Ign a GeoDago ="+ str((resultati[0]*100) / resultati[1])+"%\r\n" )
-    f.write("Relacion: total eventos GeoDago a Ign ="+ str((resultati[1]*100) / resultati[0])+"%\r\n" )
-    f.write("Porcentaje de excepciones en GeoDago ="+ str((resultati[2]*100) / resultati[1])+"%\r\n" )
+    f.write("Relacion: total eventos Ign a GeoDago ="+ str((resultati[0]*100) / resultati[1])+" %\r\n" )
+    f.write("Relacion: total eventos GeoDago a Ign ="+ str((resultati[1]*100) / resultati[0])+" %\r\n" )
+    f.write("Porcentaje de excepciones en GeoDago ="+ str((resultati[2]*100) / resultati[1])+" %\r\n" )
     f.write("Total eventos detectados por GeoDago y no Ign:"+ str(resultati[3])+"\r\n" )
     f.write("Total eventos detectados por Ign y no GeoDago:"+ str(resultati[4])+"\r\n" )
     f.close()    
 
 # headers necesarios index: 3 ti, 5 tf, 11 amp
-ignResult = lecturaIgn("SmCotoEne2018.txt")
+ignResult = lecturaIgn("SmCotoEne2018.txt")#("SmCotoEne2018.txt")
 ignResult.pop(0)
 ignSort = sortAmp(ignResult, 1000)
-printo("comparaIgn", ignSort)
+printo("comparaIgn", ignSort)#("comparaIgn", ignSort)
 
 dagoResult = lecturaDago("resultados.txt")
 dagoResult.pop(0)
 #dagoSort = sortAmp(dagoResult, 1000)
 #printo("comparaDago.txt", dagoResult)
 
-comparador("comparacionFinal",ignSort,dagoResult, 10)
+comparador("comparacionFinal",ignSort,dagoResult, 70)
