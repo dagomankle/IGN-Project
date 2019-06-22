@@ -8,6 +8,7 @@ Created on Fri Mar  1 12:28:34 2019
 #import Scripts.SegmenterAlfa3
 import Analizer
 #import SegmenterAlfa3
+print("Usando Redunder")
 
 def redo(l1,l2,l3, seconds) :#cuando se realiza la redundancia despues de el analisis se usa redo para armar partitioner y tener los tiempos listos.
     
@@ -21,6 +22,7 @@ def redo(l1,l2,l3, seconds) :#cuando se realiza la redundancia despues de el ana
     lf.setSignalsDg([l1,l2,l3])
     lf.setFinalTraces(lfl[0])
     lf.setExternalevTimes(lfl[1])
+    lf.setFinalTypeTraces(lfl[2])
     
     return lf
 
@@ -48,7 +50,9 @@ def timeChecker(eL1,eL2,eL3, seconds): #timeChecker(lista, seconds):
     
     #for i in range(len(eL1)): #usar tiempos el subsearch times ni se que 
     while flag2 or flag3 or flag4: #notDone: 
-        
+        print()
+        print('flags: '+ str(flag1)+'/' +str(flag2)+'/'+str(flag3)+'/'+str(flag4))
+        print('index: '+ str(i)+'/' +str(o)+'/'+str(u))
         if len(eL1) <= i:
             flag2 = False
         if len(eL2) <= o:
@@ -57,45 +61,153 @@ def timeChecker(eL1,eL2,eL3, seconds): #timeChecker(lista, seconds):
             flag4 = False
 # usar el timedelta en las comparaciones talvez o a nivel de cada elemento ... timedelta mejor.         
         if flag2:
-            '''if flag3 and flag4 and eL1[i].getStats().starttime == eL2[o].getStats().starttime == eL3[u].getStats().starttime:
-                lf.append(eL1[i])
-                i += 1
-                o += 1
-                u += 1'''
+
+            if flag3 and flag4:
+                print(str(eL1[i].getStats().starttime) +'/' +str(eL2[o].getStats().starttime) +'/'+str(eL3[u].getStats().starttime))
+                print(str(eL1[i].getStats().endtime) +'/' +str(eL2[o].getStats().endtime) +'/'+str(eL3[u].getStats().endtime))
+            elif flag3:
+                print(str(eL1[i].getStats().starttime) +'/' +str(eL2[o].getStats().starttime))
+                print(str(eL1[i].getStats().endtime) +'/' +str(eL2[o].getStats().endtime))
+            elif flag4:
+                print(str(eL1[i].getStats().starttime)  +'/'+str(eL3[u].getStats().starttime))
+                print(str(eL1[i].getStats().endtime)  +'/'+str(eL3[u].getStats().endtime))
+            
             if flag3 and abs(eL1[i].getStats().starttime - eL2[o].getStats().starttime) <= seconds:
                 lf.append(eL1[i])
                 i += 1
                 o += 1
-                if flag4 and abs(eL1[i-1].getStats().starttime - eL3[u].getStats().endtime) <= seconds:# inicialt  >= finalt 
-                    u += 1
-                elif abs(eL1[i-1].getStats().starttime - eL3[u].getStats().starttime) <= seconds:
-                    u += 1
-                    '''if flag3 and abs(eL1[i-1].getStats().starttime - eL2[o].getStats().endtime) <= seconds:# inicialt  >= finalt 
-                        o += 1'''
+                while True and flag4:
+                    if abs(eL1[i-1].getStats().starttime - eL3[u].getStats().starttime) <= seconds:
+                        u += 1
+                        break
+                    elif (eL1[i-1].getStats().starttime  >= eL3[u].getStats().endtime):# inicialt  >= finalt 
+                        print('gg')
+                        u += 1 
+                    elif (eL3[u].getStats().starttime  >= eL1[i-1].getStats().endtime):
+                        break
+                    elif (eL1[i-1].getStats().starttime  <= eL3[u].getStats().endtime):
+                        u += 1
+                        break
             elif flag4 and abs(eL1[i].getStats().starttime - eL3[u].getStats().starttime) <= seconds:
                 lf.append(eL1[i])
                 i += 1
                 u += 1
-                if flag3 and abs(eL1[i-1].getStats().starttime - eL2[o].getStats().endtime) <= seconds:# inicialt  >= finalt 
-                    o += 1
-            elif flag3 and abs(eL1[i].getStats().endtime - eL2[o].getStats().starttime) <= seconds:  #revisar si no hay falla por index out of bounds
-                i += 1 
+                while True and flag3:
+                    if abs(eL1[i-1].getStats().starttime - eL2[o].getStats().starttime) <= seconds:
+                        o += 1
+                        break
+                    elif (eL1[i-1].getStats().starttime >= eL2[o].getStats().endtime):# inicialt  >= finalt 
+                        print('gg')
+                        o += 1
+                    elif (eL2[o].getStats().starttime >= eL1[i-1].getStats().endtime):
+                        break
+                    elif(eL1[i-1].getStats().starttime <= eL2[o].getStats().endtime):
+                        o += 1
+                        break
+            elif flag3 and abs(eL1[i].getStats().endtime - eL2[o].getStats().endtime) <= seconds:
+                lf.append(eL2[o])
+                i += 1
+                o += 1
+            elif flag4 and abs(eL1[i].getStats().endtime - eL3[u].getStats().endtime) <= seconds:
+                lf.append(eL3[u])
+                i += 1
+                u += 1
+            elif flag3 and eL1[i].getStats().endtime >= eL2[o].getStats().endtime and eL1[i].getStats().starttime <= eL2[o].getStats().starttime:
+                lf.append(eL2[o])
+                i += 1
+                o += 1
+            elif flag4 and eL1[i].getStats().endtime >= eL3[u].getStats().endtime and eL1[i].getStats().starttime >= eL3[u].getStats().starttime:
+                lf.append(eL3[u])
+                i += 1
+                u += 1 
+            elif flag3 and (eL2[o].getStats().starttime >= eL1[i].getStats().endtime ):
+                while True and flag4:
+                    if abs(eL1[i].getStats().starttime - eL3[u].getStats().starttime) <= seconds:
+                        lf.append(eL1[i])
+                        u += 1
+                        i += 1
+                        break
+                    elif eL1[i].getStats().endtime >= eL3[u].getStats().endtime and eL1[i].getStats().starttime < eL3[u].getStats().endtime:
+                        lf.append(eL3[u])
+                        i += 1
+                        u += 1
+                        break
+                    elif eL1[i].getStats().endtime <= eL3[u].getStats().endtime and eL1[i].getStats().endtime > eL3[u].getStats().starttime:
+                        lf.append(eL1[i])
+                        i += 1
+                        u += 1
+                        break
+                    elif (eL1[i].getStats().starttime  >= eL3[u].getStats().endtime):# inicialt  >= finalt 
+                        u += 1 
+                    elif (eL3[u].getStats().starttime  >= eL1[i].getStats().endtime):
+                        i += 1
+                        break 
+                #flag1 = True
+            elif flag4 and (eL3[u].getStats().starttime  >= eL1[i].getStats().endtime):
+                while True and flag3:
+                    if abs(eL1[i].getStats().starttime - eL2[o].getStats().starttime) <= seconds:
+                        lf.append(eL1[i])
+                        o += 1
+                        i += 1
+                        break
+                    elif eL1[i].getStats().endtime >= eL2[o].getStats().endtime and eL1[i].getStats().starttime < eL2[o].getStats().endtime:
+                        lf.append(eL2[o])
+                        o += 1
+                        i += 1
+                        break
+                    elif eL1[i].getStats().endtime <= eL2[o].getStats().endtime and eL1[i].getStats().endtime > eL2[o].getStats().starttime:
+                        lf.append(eL1[i])
+                        o += 1
+                        i += 1
+                        break
+                    elif (eL1[i].getStats().starttime >= eL2[o].getStats().endtime):# inicialt  >= finalt 
+                        o += 1
+                    elif (eL2[o].getStats().starttime >= eL1[i].getStats().endtime):
+                        i += 1
+                        break 
+                #flag1 = True
+            elif flag3 and flag4:
                 flag1 = True
-            elif flag4 and abs(eL1[i].getStats().endtime - eL3[u].getStats().starttime) <= seconds:
-                i += 1 
-                flag1 = True
+            elif flag4 and (eL1[i].getStats().starttime  >= eL3[u].getStats().endtime):
+                u += 1
+            elif flag3 and (eL1[i].getStats().starttime >= eL2[o].getStats().endtime):
+                o += 1
             else:
-                flag1 = True
+                flag2 = False
+        if flag2 == False:
+            flag1 = True
         
         if flag1 and flag3 and flag4:
+            print('entra: '+str(eL2[o].getStats().starttime)+'/'+str(eL3[u].getStats().starttime))
+            print('entra: '+str(eL2[o].getStats().endtime)+'/'+str(eL3[u].getStats().endtime))
             if abs(eL2[o].getStats().starttime - eL3[u].getStats().starttime) <= seconds:
                 lf.append(eL2[o])
                 o += 1
                 u += 1
-            else: # como carajos usar diferencias de tiempocon aproximados o exactidud hasta min? hmmm datatime.datatime class
-                if abs(eL3[u].getStats().starttime - eL2[o].getStats().endtime) <= seconds:# inicialt  >= finalt
+            elif abs(eL2[o].getStats().endtime - eL3[u].getStats().endtime) <= seconds:
+                lf.append(eL2[o])
+                o += 1
+                u += 1
+            elif eL2[o].getStats().endtime >= eL3[u].getStats().endtime and eL2[o].getStats().starttime <= eL3[u].getStats().starttime:
+                lf.append(eL3[u])
+                o += 1
+                u += 1
+            elif eL2[o].getStats().endtime <= eL3[u].getStats().endtime and eL2[o].getStats().starttime >= eL3[u].getStats().starttime:
+                lf.append(eL2[o])
+                o += 1
+                u += 1
+            elif eL2[o].getStats().endtime >= eL3[u].getStats().endtime and eL2[o].getStats().starttime < eL3[u].getStats().endtime:
+                lf.append(eL3[u])
+                o += 1
+                u += 1
+            elif eL2[o].getStats().endtime <= eL3[u].getStats().endtime and eL2[o].getStats().endtime > eL3[u].getStats().starttime:
+                lf.append(eL2[o])
+                o += 1
+                u += 1
+            else:
+                if eL3[u].getStats().starttime >= eL2[o].getStats().endtime:
                     o += 1
-                elif abs(eL2[o].getStats().starttime - eL3[u].getStats().endtime) <= seconds:# inicialt  >= finalt
+                elif eL2[o].getStats().starttime >= eL3[u].getStats().endtime:
                     u += 1
         elif flag2 == False and flag3 == False:# se puede mejorar haciendo que toda la columna muera
             u += 1
@@ -103,16 +215,14 @@ def timeChecker(eL1,eL2,eL3, seconds): #timeChecker(lista, seconds):
             o += 1
         
         flag1 = False
-            
-        '''if len(eL1) + 1 == i and len(eL2) + 1 == o and len(eL3) + 1 == u:
-            notDone = False'''
     
     return lf 
 
 def timeCheckerS(l1,l2,l3, seconds): #usa traces directamente no dgsignals pilas!
 
     lf = []
-    times = []    
+    times = []
+    types = []    
     
     eL1 = l1.getFinalTraces()
     eL2 = l2.getFinalTraces()
@@ -130,7 +240,9 @@ def timeCheckerS(l1,l2,l3, seconds): #usa traces directamente no dgsignals pilas
     
     #for i in range(len(eL1)): #usar tiempos el subsearch times ni se que 
     while flag2 or flag3 or flag4: #notDone: 
-        
+        print()
+        print('flags: '+ str(flag1)+'/' +str(flag2)+'/'+str(flag3)+'/'+str(flag4))
+        print('index: '+ str(i)+'/' +str(o)+'/'+str(u))
         if len(eL1) <= i:
             flag2 = False
         if len(eL2) <= o:
@@ -144,45 +256,198 @@ def timeCheckerS(l1,l2,l3, seconds): #usa traces directamente no dgsignals pilas
                 i += 1
                 o += 1
                 u += 1'''
-            print(i)
+            if flag3 and flag4:
+                print(str(eL1[i].stats.starttime) +'/' +str(eL2[o].stats.starttime) +'/'+str(eL3[u].stats.starttime))
+                print(str(eL1[i].stats.endtime) +'/' +str(eL2[o].stats.endtime) +'/'+str(eL3[u].stats.endtime))
+            elif flag3:
+                print(str(eL1[i].stats.starttime) +'/' +str(eL2[o].stats.starttime))
+                print(str(eL1[i].stats.endtime) +'/' +str(eL2[o].stats.endtime))
+            elif flag4:
+                print(str(eL1[i].stats.starttime)  +'/'+str(eL3[u].stats.starttime))
+                print(str(eL1[i].stats.endtime)  +'/'+str(eL3[u].stats.endtime))
+            #print(' la fecha para l1: ' + str(eL1[i].stats.starttime))
+            
             if flag3 and abs(eL1[i].stats.starttime - eL2[o].stats.starttime) <= seconds:
                 lf.append(eL1[i])
                 times.append(l1.getEventTimes()[i])
+                types.append(l1.getEventTypes()[i])
                 i += 1
                 o += 1
-                if flag4 and abs(eL1[i-1].stats.starttime - eL3[u].stats.endtime) <= seconds:# inicialt  >= finalt 
-                    u += 1
-                elif abs(eL1[i-1].stats.starttime - eL3[u].stats.starttime) <= seconds:
-                    u += 1
-                    '''if flag3 and abs(eL1[i-1].getStats().starttime - eL2[o].getStats().endtime) <= seconds:# inicialt  >= finalt 
-                        o += 1'''
+                while True and flag4:
+                    if flag4 and abs(eL1[i-1].stats.starttime - eL3[u].stats.starttime) <= seconds:
+                        u += 1
+                        break
+                    elif (eL1[i-1].stats.starttime  >= eL3[u].stats.endtime):# inicialt  >= finalt 
+                        u += 1 
+                    elif (eL3[u].stats.starttime  >= eL1[i-1].stats.endtime):
+                        break
+                    elif (eL1[i-1].stats.starttime  <= eL3[u].stats.endtime):
+                        u += 1
+                        break
             elif flag4 and abs(eL1[i].stats.starttime - eL3[u].stats.starttime) <= seconds:
                 lf.append(eL1[i])
                 times.append(l1.getEventTimes()[i])
+                types.append(l1.getEventTypes()[i])
                 i += 1
                 u += 1
-                if flag3 and abs(eL1[i-1].stats.starttime - eL2[o].stats.endtime) <= seconds:# inicialt  >= finalt 
-                    o += 1
-            elif flag3 and abs(eL1[i].stats.endtime - eL2[o].stats.starttime) <= seconds:  #revisar si no hay falla por index out of bounds
+                while True and flag3:
+                    if abs(eL1[i-1].stats.starttime - eL2[o].stats.starttime) <= seconds:
+                        o += 1
+                        break
+                    elif (eL1[i-1].stats.starttime >= eL2[o].stats.endtime):# inicialt  >= finalt 
+                        o += 1
+                    elif (eL2[o].stats.starttime >= eL1[i-1].stats.endtime):
+                        break
+                    elif (eL1[i-1].stats.starttime <= eL2[o].stats.endtime):
+                        o += 1
+                        break
+            elif flag3 and abs(eL1[i].stats.endtime - eL2[o].stats.endtime) <= seconds:
+                lf.append(eL2[o])
+                times.append(l2.getEventTimes()[o])
+                types.append(l2.getEventTypes()[o])
+                i += 1
+                o += 1
+            elif flag4 and abs(eL1[i].stats.endtime - eL3[u].stats.endtime) <= seconds:
+                lf.append(eL3[u])
+                times.append(l3.getEventTimes()[u])
+                types.append(l3.getEventTypes()[u])
+                i += 1
+                u += 1
+            elif flag3 and eL1[i].stats.endtime >= eL2[o].stats.endtime and eL1[i].stats.starttime <= eL2[o].stats.starttime:
+                lf.append(eL2[o])
+                times.append(l2.getEventTimes()[o])
+                types.append(l2.getEventTypes()[o])
+                i += 1
+                o += 1
+            elif flag4 and eL1[i].stats.endtime >= eL3[u].stats.endtime and eL1[i].stats.starttime >= eL3[u].stats.starttime:
+                lf.append(eL3[u])
+                times.append(l3.getEventTimes()[u])
+                types.append(l3.getEventTypes()[u])
+                i += 1
+                u += 1  
+            elif flag3 and (eL2[o].stats.starttime >= eL1[i].stats.endtime ):
+                while True and flag4:
+                    if abs(eL1[i].stats.starttime - eL3[u].stats.starttime) <= seconds:
+                        lf.append(eL1[i])
+                        times.append(l1.getEventTimes()[i])
+                        types.append(l1.getEventTypes()[i])
+                        u += 1
+                        i += 1
+                        break
+                    elif eL1[i].stats.endtime >= eL3[u].stats.endtime and eL1[i].stats.starttime < eL3[u].stats.endtime:
+                        lf.append(eL3[u])
+                        times.append(l3.getEventTimes()[u])
+                        types.append(l3.getEventTypes()[u])
+                        i += 1
+                        u += 1
+                        break
+                    elif eL1[i].stats.endtime <= eL3[u].stats.endtime and eL1[i].stats.endtime > eL3[u].stats.starttime:
+                        lf.append(eL1[i])
+                        times.append(l1.getEventTimes()[i])
+                        types.append(l1.getEventTypes()[i])
+                        i += 1
+                        u += 1
+                        break                    
+                    elif (eL1[i].stats.starttime  >= eL3[u].stats.endtime):# inicialt  >= finalt 
+                        u += 1 
+                    elif (eL3[u].stats.starttime  >= eL1[i].stats.endtime):
+                        i += 1
+                        break 
+                #flag1 = True
+            elif flag4 and (eL3[u].stats.starttime  >= eL1[i].stats.endtime):
+                while True and flag3:
+                    if abs(eL1[i].stats.starttime - eL2[o].stats.starttime) <= seconds:
+                        lf.append(eL1[i])
+                        times.append(l1.getEventTimes()[i])
+                        types.append(l1.getEventTypes()[i])
+                        o += 1
+                        i += 1
+                        break
+                    elif eL1[i].stats.endtime >= eL2[o].stats.endtime and eL1[i].stats.starttime < eL2[o].stats.endtime:
+                        lf.append(eL2[o])
+                        times.append(l2.getEventTimes()[o])
+                        types.append(l2.getEventTypes()[o])
+                        o += 1
+                        i += 1
+                        break
+                    elif eL1[i].stats.endtime <= eL2[o].stats.endtime and eL1[i].stats.endtime > eL2[o].stats.starttime:
+                        lf.append(eL1[i])
+                        times.append(l1.getEventTimes()[i])
+                        types.append(l1.getEventTypes()[i])
+                        o += 1
+                        i += 1
+                        break                    
+                    elif (eL1[i].stats.starttime >= eL2[o].stats.endtime):# inicialt  >= finalt 
+                        o += 1
+                    elif (eL2[o].stats.starttime >= eL1[i].stats.endtime):
+                        i += 1
+                        break 
+            elif flag3 and flag4:
+                flag1 = True
+            elif flag4 and (eL1[i].stats.starttime  >= eL3[u].stats.endtime):
+                u += 1
+            elif flag3 and (eL1[i].stats.starttime >= eL2[o].stats.endtime):
+                o += 1
+            else:
+                flag2 = False
+            '''elif flag3 and abs(eL1[i].stats.endtime - eL2[o].stats.starttime) <= seconds:  #revisar si no hay falla por index out of bounds
                 i += 1 
                 flag1 = True
             elif flag4 and abs(eL1[i].stats.endtime - eL3[u].stats.starttime) <= seconds:
                 i += 1 
-                flag1 = True
-            else:
-                flag1 = True
+                flag1 = True'''
+        if flag2 == False:
+            flag1 = True
         
         if flag1 and flag3 and flag4:
+            print('entra: '+str(eL2[o].stats.starttime)+'/'+str(eL3[u].stats.starttime))
+            print('entra: '+str(eL2[o].stats.endtime)+'/'+str(eL3[u].stats.endtime))
             if abs(eL2[o].stats.starttime - eL3[u].stats.starttime) <= seconds:
                 lf.append(eL2[o])
                 times.append(l2.getEventTimes()[o])
+                types.append(l2.getEventTypes()[o])
+                o += 1
+                u += 1
+            elif abs(eL2[o].stats.endtime - eL3[u].stats.endtime) <= seconds:
+                lf.append(eL2[o])
+                times.append(l2.getEventTimes()[o])
+                types.append(l2.getEventTypes()[o])
+                o += 1
+                u += 1
+            elif eL2[o].stats.endtime >= eL3[u].stats.endtime and eL2[o].stats.starttime <= eL3[u].stats.starttime:
+                lf.append(eL3[u])
+                times.append(l3.getEventTimes()[u])
+                types.append(l3.getEventTypes()[u])
+                o += 1
+                u += 1
+            elif eL2[o].stats.endtime <= eL3[u].stats.endtime and eL2[o].stats.starttime >= eL3[u].stats.starttime:
+                lf.append(eL2[o])
+                times.append(l2.getEventTimes()[o])
+                types.append(l2.getEventTypes()[o])
+                o += 1
+                u += 1
+            elif eL2[o].stats.endtime >= eL3[u].stats.endtime and eL2[o].stats.starttime < eL3[u].stats.endtime:
+                lf.append(eL3[u])
+                times.append(l3.getEventTimes()[u])
+                types.append(l3.getEventTypes()[u])
+                o += 1
+                u += 1
+            elif eL2[o].stats.endtime <= eL3[u].stats.endtime and eL2[o].stats.endtime > eL3[u].stats.starttime:
+                lf.append(eL2[o])
+                times.append(l2.getEventTimes()[o])
+                types.append(l2.getEventTypes()[o])
                 o += 1
                 u += 1
             else: # como carajos usar diferencias de tiempocon aproximados o exactidud hasta min? hmmm datatime.datatime class
-                if abs(eL3[u].stats.starttime - eL2[o].stats.endtime) <= seconds:# inicialt  >= finalt
+
+                '''if abs(eL3[u].stats.starttime - eL2[o].stats.endtime) <= seconds:# inicialt  >= finalt
                     o += 1
                 elif abs(eL2[o].stats.starttime - eL3[u].stats.endtime) <= seconds:# inicialt  >= finalt
-                    u += 1
+                    u += 1'''
+                if eL3[u].stats.starttime >= eL2[o].stats.endtime:
+                    o += 1
+                elif eL2[o].stats.starttime >= eL3[u].stats.endtime:
+                    u += 1                
         elif flag2 == False and flag3 == False:# se puede mejorar haciendo que toda la columna muera
             u += 1
         elif flag2 == False and flag4 == False:
@@ -193,4 +458,4 @@ def timeCheckerS(l1,l2,l3, seconds): #usa traces directamente no dgsignals pilas
         '''if len(eL1) + 1 == i and len(eL2) + 1 == o and len(eL3) + 1 == u:
             notDone = False'''
     
-    return [lf, times]
+    return [lf, times, types]

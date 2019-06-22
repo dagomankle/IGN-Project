@@ -186,19 +186,19 @@ def bigTimesManagerD(aNombre1, bNombre1, cNombre1, dias, amp, ventana, seconds, 
 
 h1 = SegmenterAlfa3.datetime.now()
 
-'''l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018', 500, 320)
-l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018', 500, 320)
-l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018', 500, 320)'''
+l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018', 1000, 320)
+l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018', 1000, 320)
+l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018', 1000, 320)
 
-l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002', 1000, 320)
-l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002',1000, 320)
-l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002', 1000, 320)
+'''l1 = SegmenterAlfa3.SignalDg('EC.BVC2..BHZ.D.2018.002pf', 1000, 320)
+l2 = SegmenterAlfa3.SignalDg('EC.BTAM..BHZ.D.2018.002pf',1000, 320)
+l3 = SegmenterAlfa3.SignalDg('EC.BREF..BHZ.D.2018.002pf', 1000, 320)'''
     
 
 #seg = segmenter()
-#reds = redundancy(l1, l2, l3, 10)
-part = partitioner(l1, l2, l3, 10)
-#solPart = partitionerSol('EC.BREF..BHZ.D.2018.002',1000)
+#reds = redundancy(l1, l2, l3, 15)
+part = partitioner(l1, l2, l3, 15)
+#solPart = partitionerSol('EC.BREF..BHZ.D.2018.002pf',500)
 h2 = SegmenterAlfa3.datetime.now()
 hfinals = h2 -h1
 print(hfinals)

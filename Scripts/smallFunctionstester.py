@@ -148,10 +148,10 @@ def comparador(name,ign, geoDago, seconds):
 # headers necesarios index: 3 ti, 5 tf, 11 amp
 ignResult = lecturaIgn("SmCotoEne2018.txt")#("SmCotoEne2018.txt")
 ignResult.pop(0)
-ignSort = sortAmp(ignResult, 500)
+ignSort = sortAmp(ignResult, 1000)
 printo("comparaIgn", ignSort)#("comparaIgn", ignSort)
 
-dagoResult = lecturaDago("resultados.txt")
+dagoResult = lecturaDago("resultados1000F1.txt")
 dagoResult.pop(0)
 #dagoSort = sortAmp(dagoResult, 1000)
 #printo("comparaDago.txt", dagoResult)

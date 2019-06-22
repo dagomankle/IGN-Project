@@ -186,6 +186,12 @@ class Partitioner:
     def setFinalTraces(self, lf):
         self.__finalTraces = lf
 
+    def setFinalTypeTraces(self, lf):
+        self.__typeTraces = lf
+
+    def getEventTypes(self):
+        return self.__typeTraces
+
     def setSignalsDg(self, signal):
         self.__signalsDg = signal
         
@@ -218,9 +224,10 @@ class Partitioner:
         f.close()
         
     def printResult(self):# se puede modificar para acomodar a los tokens deseados. 
-        f = open("resultados.txt","w+")
+        f = open("resultadospf.txt","w+")
         print(len(self.__finalTraces))
         print(len(self.__lEventTimes))
+        print(len(self.__typeTraces))
         #f.write("Resultados\r\n\n Tiempo p, Tiempo s, Tiempo Fin de picado \r\n" )
         f.write("Tiempo inicio de picado,Tiempo Fin de picado,Amplitud,Excepción\r\n" )
         for i in range(len(self.__lEventTimes)):
